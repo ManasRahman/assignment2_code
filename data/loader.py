@@ -2,6 +2,8 @@ import copy
 import logging
 import pandas as pd
 import numpy as np
+import glob
+import re
 
 from collections import Counter
 
@@ -10,6 +12,9 @@ import sklearn.model_selection as ms
 from scipy.sparse import isspmatrix
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
+from imblearn.over_sampling import RandomOverSampler 
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+
 
 import os
 import seaborn as sns
@@ -289,6 +294,37 @@ class PenDigitData(DataLoader):
     def pre_training_adjustment(self, train_features, train_classes):
         return train_features, train_classes
 
+class OnlineShopperData(DataLoader):
+    def __init__(self, path='data/online_shoppers_original/online_shoppers_intention.csv', verbose=False, seed=1):
+        super().__init__(path, verbose, seed)
+        
+    def _load_data(self):
+        self._data = pd.read_csv(self._path)
+
+    def data_name(self):
+        return "OnlineShopperData"
+
+    def class_column_name(self):
+        return "Revenue"
+
+    def _preprocess_data(self):
+        df = self._data
+        # convert month to boolean columns
+        df = pd.concat([df, pd.get_dummies(df.Month)], axis=1) \
+                .drop(columns=['Month'])
+        df = pd.concat([df, pd.get_dummies(df.VisitorType)], axis=1) \
+                .drop(columns=['VisitorType'])
+        df = pd.concat([df.drop(columns='Revenue'), df.Revenue], axis=1)
+        df = df.reindex()
+        bool_columns = [k for k, v in self._data.dtypes.items() if v == np.dtype('bool')]
+        df[bool_columns] = df[bool_columns].astype('int32')
+        self._data = df
+
+    def pre_training_adjustment(self, train_features, train_classes):
+        sampler = RandomOverSampler(random_state=0)
+        train_features_resampled, train_classes_resampled = sampler.fit_sample(train_features, train_classes)
+        return train_features_resampled, train_classes_resampled
+
 
 class AbaloneData(DataLoader):
     def __init__(self, path='data/abalone.data', verbose=False, seed=1):
@@ -299,6 +335,9 @@ class AbaloneData(DataLoader):
 
     def data_name(self):
         return 'AbaloneData'
+
+    def _preprocess_data(self):
+        pass
 
     def class_column_name(self):
         return '8'
@@ -328,6 +367,51 @@ class HTRU2Data(DataLoader):
 
     def pre_training_adjustment(self, train_features, train_classes):
         return train_features, train_classes
+
+class Segmentation(DataLoader):
+    def __init__(self, path='data/ImageSegmentationDataSet', verbose=False, seed=1):
+        super().__init__(path, verbose, seed)
+
+    def _load_data(self):
+        files = glob.glob('data/ImageSegmentationDataSet/*segmentation*')
+        self._data = pd.concat([pd.read_csv(fname,comment=';') for fname in files], axis=0)
+        class_column = self._data.CLASS.astype('category')
+        self.class_labels = class_column.unique()
+        self._data = pd.concat([self._data.drop(columns=['CLASS']), class_column.cat.codes ], axis=1)
+
+
+    def data_name(self):
+        return 'Segmentation'
+
+    def class_column_name(self):
+        return 'CLASS'
+
+    def _preprocess_data(self):
+        pass
+
+    def pre_training_adjustment(self, train_features, train_classes):
+        return train_features, train_classes
+
+class CovType(DataLoader):
+    def __init__(self, path='data/covtype/covtype.data', verbose=False, seed=1):
+        super().__init__(path, verbose, seed)
+
+    def _load_data(self):
+        self._data = pd.read_csv(self._path, header=None)
+
+
+    def data_name(self):
+        return 'CoverType'
+
+    def class_column_name(self):
+        return '54'
+
+    def _preprocess_data(self):
+        pass
+
+    def pre_training_adjustment(self, train_features, train_classes):
+        return train_features, train_classes
+
 
 
 class SpamData(DataLoader):
