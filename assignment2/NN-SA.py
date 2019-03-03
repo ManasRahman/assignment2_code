@@ -14,11 +14,11 @@ from func.nn.activation import RELU
 from base import *
 
 # Network parameters found "optimal" in Assignment 1
-INPUT_LAYER = 8
-HIDDEN_LAYER1 = 16
-HIDDEN_LAYER2 = 16
+INPUT_LAYER = 28 
+HIDDEN_LAYER1 = 56
+HIDDEN_LAYER2 = 56
 OUTPUT_LAYER = 1
-TRAINING_ITERATIONS = 5001
+TRAINING_ITERATIONS = 3000
 OUTFILE = OUTPUT_DIRECTORY + '/NN_OUTPUT/NN_{}_LOG.csv'
 
 
@@ -35,8 +35,8 @@ def main(CE):
     rule = RPROPUpdateRule(0.064, 50, 0.000001)
     oa_name = "SA_{}".format(CE)
     with open(OUTFILE.format(oa_name), 'w') as f:
-        f.write('{},{},{},{},{},{},{},{},{},{},{}\n'.format('iteration', 'MSE_trg', 'MSE_val', 'MSE_tst', 'acc_trg',
-                                                            'acc_val', 'acc_tst', 'f1_trg', 'f1_val', 'f1_tst',
+        f.write('{},{},{},{},{},{},{},{},{},{},{},{},{},{}\n'.format('iteration', 'MSE_trg', 'MSE_val', 'MSE_tst', 'acc_trg',
+                                                            'acc_val', 'acc_tst', 'f1_trg', 'f1_val', 'f1_tst', 'bal_trg', 'bal_val', 'bal_tst',
                                                             'elapsed'))
     classification_network = factory.createClassificationNetwork(
         [INPUT_LAYER, HIDDEN_LAYER1, HIDDEN_LAYER2, OUTPUT_LAYER], relu)

@@ -45,36 +45,11 @@ if __name__ == '__main__':
     logger.info("----------")
 
     datasets = [
-        # {
-        #     'data': loader.StatlogVehicleData(verbose=verbose, seed=seed),
-        #     'name': 'statlog_vehicle',
-        #     'readable_name': 'Statlog Vehicle',
-        # },
-        # {
-        #     'data': loader.HTRU2Data(verbose=verbose, seed=seed),
-        #     'name': 'htru2',
-        #     'readable_name': 'HTRU2',
-        # },
         {
-            'data': loader.CreditApprovalData(verbose=verbose, seed=seed),
-            'name': 'credit_approval',
-            'readable_name': 'Credit Approval',
-        },
-        {
-            'data': loader.PenDigitData(verbose=verbose, seed=seed),
-            'name': 'pen_digits',
-            'readable_name': 'Handwritten Digits',
+            'data': loader.OnlineShopperData(verbose=verbose, seed=seed),
+            'name': 'online_shopper_data',
+            'readable_name': 'Online Shopper Revenue',
         }
-        # {
-        #     'data': loader.SpamData(verbose=verbose, seed=seed),
-        #     'name': 'spam',
-        #     'readable_name': 'Spam',
-        # },
-        # {
-        #     'data': loader.CreditDefaultData(verbose=verbose, seed=seed),
-        #     'name': 'credit_default',
-        #     'readable_name': 'Credit Default',
-        # }
     ]
 
     experiment_details = []

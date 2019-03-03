@@ -321,9 +321,7 @@ class OnlineShopperData(DataLoader):
         self._data = df
 
     def pre_training_adjustment(self, train_features, train_classes):
-        sampler = RandomOverSampler(random_state=0)
-        train_features_resampled, train_classes_resampled = sampler.fit_sample(train_features, train_classes)
-        return train_features_resampled, train_classes_resampled
+        return train_features, train_classes
 
 
 class AbaloneData(DataLoader):
