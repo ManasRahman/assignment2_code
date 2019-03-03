@@ -1,0 +1,34 @@
+---
+title:  'Randomized Optimization: Search and Optimizing models' 
+subtitle: 'github link https://github.com/AlexanderCurtin/assignment2_code'
+numbersections: true
+
+# unfortunately, ACM does not use standard LaTex for setting authors and asbtract
+# Therefore, the following blocks would not work
+#author:
+#- name: Daniel Graziotin
+#  affiliation: University of Stuttgart
+#- name: Author Two
+#  affiliation: University of Nowhere
+#tags: [nothing, nothingness]
+
+# abstract works
+abstract: |
+  Randomized optimization is a class of solutions for finding
+  local maximum or minimum values of an underlying function
+  without prior knowledge of the function itself. This paper
+  compares the performance of four search algorithms, randomized
+  hill climbing, simulated annealing, a genetic algorithim and MIMIC
+  against 3 different search problems with known underlying models, 
+  and then uses the same algorithms as optimizers when training the
+  weights of a neural network.
+header-includes: |
+  \usepackage{booktabs}
+  \author{
+  \alignauthor
+  Alexander Curtin\\
+         \email{acurtin9@gatech.edu}
+  }
+
+
+...
